@@ -14,14 +14,14 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
   console.log('New user connected');
 
-  socket.emit('newMessage', {
-    from: 'Chang',
-    text: 'Hello, are you there?',
-    createdAt: new Date().getTime()
-  });
-
   socket.on('createMessage', (message) => {
     console.log('createMessage', message);
+    // io.emit emits to every connection connected to io, while socket.emit only emits to a single connection
+    io.emit('newMessage', {
+      from: message.from,
+      text: message.text,
+      createdAt: new Date().getTime()
+    });
   })
 
   socket.on('disconnect', () => {
